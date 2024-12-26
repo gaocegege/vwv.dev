@@ -1,5 +1,7 @@
+import json
 from openai import OpenAI
 import os
+import re
 
 
 api_key = os.getenv("DEEPSEEK_API_KEY")
@@ -12,190 +14,190 @@ client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 response = client.chat.completions.create(
     model="deepseek-coder",
     messages=[
-        {"role": "system", "content": "You are a helpful assistant, who will help me to write front-end code. Your code should be clean, well-organized, and easy to understand."},
+        {"role": "system", "content": 
+"""As a helpful assistant, you will write clean, well-organized, and easy-to-understand front-end code. The code should be written in markdown format, with file names indicated as section titles using the "###" prefix. Different files should be separated by a "---".
+
+Focus on creating simple, understandable, and modular code. Include necessary comments to explain the purpose of each section or function.
+
+Below is a template to follow:
+
+### script.js
+```javascript
+// Your code here
+```
+---
+### style.css
+```css
+/* Your code here */
+```
+---
+### index.html
+```html
+<!-- Your code here -->
+```
+"""},
         {"role": "user", "content": "Write a blog website with blue theme"},
   ],
     max_tokens=1024,
     temperature=0.0,
-    stream=False
+    stream=False,
+    response_format={
+        'type': 'json_object'
+    }
 )
 
-print(response.choices[0].message.content)
+print(json.loads(response.choices[0].message.content))
 
-# The output will be:
+# Here’s a simple blog website with a blue theme. The design is clean and modular, with a focus on readability and simplicity.
+
 # ---
 
-# ### **HTML (index.html)**
+# ### style.css
+# ```css
+# /* General Styles */
+# body {
+#     font-family: Arial, sans-serif;
+#     margin: 0;
+#     padding: 0;
+#     background-color: #f0f8ff; /* Light blue background */
+#     color: #333;
+# }
+
+# /* Header */
+# header {
+#     background-color: #0073e6; /* Dark blue header */
+#     color: white;
+#     padding: 20px;
+#     text-align: center;
+# }
+
+# header h1 {
+#     margin: 0;
+#     font-size: 2.5em;
+# }
+
+# /* Navigation */
+# nav {
+#     background-color: #005bb5; /* Slightly darker blue for navigation */
+#     padding: 10px;
+#     text-align: center;
+# }
+
+# nav a {
+#     color: white;
+#     text-decoration: none;
+#     margin: 0 15px;
+#     font-size: 1.2em;
+# }
+
+# nav a:hover {
+#     text-decoration: underline;
+# }
+
+# /* Main Content */
+# main {
+#     padding: 20px;
+# }
+
+# .blog-post {
+#     background-color: white;
+#     padding: 20px;
+#     margin-bottom: 20px;
+#     border-radius: 8px;
+#     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+# }
+
+# .blog-post h2 {
+#     color: #0073e6; /* Dark blue for post titles */
+#     margin-top: 0;
+# }
+
+# .blog-post p {
+#     line-height: 1.6;
+# }
+
+# /* Footer */
+# footer {
+#     background-color: #0073e6; /* Dark blue footer */
+#     color: white;
+#     text-align: center;
+#     padding: 10px;
+#     position: fixed;
+#     bottom: 0;
+#     width: 100%;
+# }
+# ```
+
+# ---
+
+# ### index.html
 # ```html
 # <!DOCTYPE html>
 # <html lang="en">
 # <head>
-#   <meta charset="UTF-8">
-#   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-#   <title>Blue Blog</title>
-#   <link rel="stylesheet" href="styles.css">
+#     <meta charset="UTF-8">
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#     <title>Blue Theme Blog</title>
+#     <link rel="stylesheet" href="style.css">
 # </head>
 # <body>
-#   <header>
-#     <div class="container">
-#       <h1>Blue Blog</h1>
-#       <nav>
-#         <ul>
-#           <li><a href="#">Home</a></li>
-#           <li><a href="#">About</a></li>
-#           <li><a href="#">Blog</a></li>
-#           <li><a href="#">Contact</a></li>
-#         </ul>
-#       </nav>
-#     </div>
-#   </header>
+#     <!-- Header -->
+#     <header>
+#         <h1>Blue Theme Blog</h1>
+#     </header>
 
-#   <main class="container">
-#     <section class="blog-posts">
-#       <article class="post">
-#         <h2>Post Title 1</h2>
-#         <p class="meta">Posted on January 1, 2023</p>
-#         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque leo a libero tincidunt, id fermentum nisi tincidunt.</p>
-#         <a href="#" class="read-more">Read More</a>
-#       </article>
-#       <article class="post">
-#         <h2>Post Title 2</h2>
-#         <p class="meta">Posted on February 15, 2023</p>
-#         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque leo a libero tincidunt, id fermentum nisi tincidunt.</p>
-#         <a href="#" class="read-more">Read More</a>
-#       </article>
-#     </section>
+#     <!-- Navigation -->
+#     <nav>
+#         <a href="#">Home</a>
+#         <a href="#">About</a>
+#         <a href="#">Contact</a>
+#     </nav>
 
-#     <aside class="sidebar">
-#       <h3>Categories</h3>
-#       <ul>
-#         <li><a href="#">Technology</a></li>
-#         <li><a href="#">Lifestyle</a></li>
-#         <li><a href="#">Travel</a></li>
-#         <li><a href="#">Health</a></li>
-#       </ul>
-#     </aside>
-#   </main>
+#     <!-- Main Content -->
+#     <main>
+#         <div class="blog-post">
+#             <h2>Welcome to My Blog</h2>
+#             <p>This is a simple blog website with a blue theme. It's designed to be clean, readable, and easy to navigate. Feel free to explore and read the posts!</p>
+#         </div>
 
-#   <footer>
-#     <div class="container">
-#       <p>&copy; 2023 Blue Blog. All rights reserved.</p>
-#     </div>
-#   </footer>
+#         <div class="blog-post">
+#             <h2>Why I Love Blue</h2>
+#             <p>Blue is a calming and serene color. It reminds me of the sky and the ocean, and it brings a sense of peace and tranquility. That's why I chose it as the theme for this blog.</p>
+#         </div>
+#     </main>
 
-#   <script src="script.js"></script>
+#     <!-- Footer -->
+#     <footer>
+#         <p>&copy; 2023 Blue Theme Blog. All rights reserved.</p>
+#     </footer>
 # </body>
 # </html>
 # ```
 
 # ---
 
-# ### **CSS (styles.css)**
-# ```css
-# /* General Styles */
-# body {
-#   font-family: Arial, sans-serif;
-#   line-height: 1.6;
-#   margin: 0;
-#   padding: 0;
-#   background-color: #f0f8ff; /* Light blue background */
-#   color: #333;
-# }
+# ### script.js
+# ```javascript
+# // Optional: Add interactivity or dynamic content here
+# // For example, you could fetch blog posts from an API and display them dynamically.
 
-# .container {
-#   width: 90%;
-#   max-width: 1200px;
-#   margin: 0 auto;
-# }
+# // Example: Add a simple alert when the page loads
+# window.onload = function() {
+#     alert("Welcome to the Blue Theme Blog!");
+# };
+# ```
 
-# /* Header Styles */
-# header {
-#   background-color: #0073e6; /* Dark blue */
-#   color: #fff;
-#   padding: 20px 0;
-#   text-align: center;
-# }
+# ---
 
-# header h1 {
-#   margin: 0;
-# }
-
-# nav ul {
-#   list-style: none;
-#   padding: 0;
-#   margin: 10px 0 0;
-# }
-
-# nav ul li {
-#   display: inline;
-#   margin: 0 15px;
-# }
-
-# nav ul li a {
-#   color: #fff;
-#   text-decoration: none;
-#   font-weight: bold;
-# }
-
-# nav ul li a:hover {
-#   text-decoration: underline;
-# }
-
-# /* Main Content Styles */
-# main {
-#   display: flex;
-#   margin: 20px 0;
-# }
-
-# .blog-posts {
-#   flex: 3;
-#   margin-right: 20px;
-# }
-
-# .post {
-#   background-color: #fff;
-#   padding: 20px;
-#   margin-bottom: 20px;
-#   border-radius: 8px;
-#   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-# }
-
-# .post h2 {
-#   margin-top: 0;
-# }
-
-# .post .meta {
-#   color: #666;
-#   font-size: 0.9em;
-# }
-
-# .post .read-more {
-#   display: inline-block;
-#   margin-top: 10px;
-#   color: #0073e6;
-#   text-decoration: none;
-#   font-weight: bold;
-# }
-
-# .post .read-more:hover {
-#   text-decoration: underline;
-# }
-
-# /* Sidebar Styles */
-# .sidebar {
-#   flex: 1;
-#   background-color: #fff
+# This code creates a simple blog website with a blue theme. The `style.css` file defines the colors and layout, the `index.html` file structures the content, and the `script.js` file can be used to add interactivity if needed.
 
 def write_files_from_response(response):
-    sections = response.choices[0].message.content.split('### **')
-    for section in sections[1:]:
-        header, content = section.split('**', 1)
-        file_name = header.strip().lower().replace(' ', '_')
-        content = content.split('```')[1].strip()  # Extract content between the first pair of ```
-        print (file_name)
-        with open(file_name, 'w') as file:
+    print("Parsing response and writing files...")
+    sections = re.split(r'### (.+)', response.choices[0].message.content)
+    for i in range(1, len(sections), 2):
+        filename = sections[i].strip()
+        content = sections[i + 1].strip().strip('```').strip()
+        print(f"Writing to file: {filename}")
+        with open(filename, 'w') as file:
             file.write(content)
-            print(f"Written to {file_name}")
-            print(f"Content written to {file_name}:\n{content}\n")
-
-write_files_from_response(response)
+    print("Files written successfully.")
